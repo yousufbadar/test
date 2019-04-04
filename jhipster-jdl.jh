@@ -1,0 +1,100 @@
+entity Organization {
+	name String required,
+	street String,
+	street2 String,
+	zip String,
+	city String,
+	stateCode String,
+	phone String,
+	email String,
+	website String
+}
+
+entity Department {
+	name String required
+}
+
+
+entity Address {
+	streetAddress String,
+	Line2 String,
+	zip String,
+	city String,
+	stateProvince String
+}
+
+
+entity Person {
+	firstName String,
+	lastName String,
+	email String,
+	phoneNumber String,
+	hireDate Instant,
+	salary Long,
+	commissionPct Long
+}
+
+entity Event {
+	title String,
+	start Instant,
+	end Instant,
+	volunteers Integer
+}
+
+entity SignUp {
+	when Instant
+
+}
+
+entity Preferences {
+  key String required min(2),
+  value String required min(2)
+}
+
+relationship ManyToOne {
+  Preferences{user(login)} to User
+}
+
+
+relationship OneToOne {
+	SignUp{event} to Event
+}
+relationship OneToMany {
+	Department{event} to Event,
+    Department{person} to Person,
+    Department{address} to Address,
+    Event{address} to Address,
+    Person{address} to Address,
+	Organization{department} to Department
+}
+
+relationship ManyToMany {
+   User{signup} to SignUp{user(login)}
+
+}
+
+relationship ManyToOne {
+	Person{manager} to Person
+}
+
+enum Language {
+    ENGLISH, SPANISH, ARABIC
+}
+
+
+// Set pagination options
+paginate Event, Employee with infinite-scroll
+paginate Job with pagination
+
+// Use Data Transfert Objects {DTO} to
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
+
+ 
+
+
